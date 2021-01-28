@@ -1,3 +1,6 @@
+#Anubhav_1811981060
+#batch_U_2
+#id_1811981060
 from sklearn import linear_model
 import tkinter as tk 
 import pandas as pd
