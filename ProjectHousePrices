@@ -1,0 +1,123 @@
+from sklearn import linear_model
+import tkinter as tk 
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+df = pd.read_csv('HousePrices.csv') 
+
+X = df[['Dwell_Type','YrSold','MoSold','LotArea','OverallQual','GrLivArea']].astype(float) # here we have 2 input variables for multiple regression. If you just want to use one variable for simple linear regression, then use X = df['Interest_Rate'] for example.Alternatively, you may add additional variables within the brackets
+Y = df['Property_Sale_Price'].astype(float) # output variable (what we are trying to predict)
+
+# with sklearn
+regr = linear_model.LinearRegression()
+regr.fit(X,Y)
+
+print('Intercept: \n', regr.intercept_)
+print('Coefficients: \n', regr.coef_)
+
+####################################################33
+
+
+# tkinter GUI
+root= tk.Tk()
+
+canvas1 = tk.Canvas(root, width = 500, height = 300)
+canvas1.pack()
+
+# with sklearn
+Intercept_result = ('Intercept: ', regr.intercept_)
+label_Intercept = tk.Label(root, text=Intercept_result, justify = 'center')
+canvas1.create_window(260, 220, window=label_Intercept)
+
+# with sklearn
+Coefficients_result  = ('Coefficients: ', regr.coef_)
+label_Coefficients = tk.Label(root, text=Coefficients_result, justify = 'center')
+canvas1.create_window(260, 240, window=label_Coefficients)
+
+
+label1 = tk.Label(root, text='Type Preffered Dwelling Type: ')
+canvas1.create_window(100, 100, window=label1)
+
+entry1 = tk.Entry (root) # create 1st entry box
+canvas1.create_window(270, 100, window=entry1)
+
+label2 = tk.Label(root, text=' Type yr Sold: ')
+canvas1.create_window(100, 120, window=label2)
+
+entry2 = tk.Entry (root) # create 2nd entry box
+canvas1.create_window(270, 120, window=entry2)
+
+label3 = tk.Label(root, text=' Type Month sold: ')
+canvas1.create_window(100, 140, window=label3)
+
+entry3 = tk.Entry (root) # create 3rd entry box
+canvas1.create_window(270, 140, window=entry3)
+
+label4 = tk.Label(root, text=' Type Lot Area: ')
+canvas1.create_window(100, 160, window=label4)
+
+entry4 = tk.Entry (root) # create 4rd entry box
+canvas1.create_window(270, 160, window=entry4)
+
+label5 = tk.Label(root, text=' Type Over All Quality: ')
+canvas1.create_window(100, 180, window=label5)
+
+entry5 = tk.Entry (root) # create 3rd entry box
+canvas1.create_window(270, 180, window=entry5)
+
+label6 = tk.Label(root, text=' Type Living Area: ')
+canvas1.create_window(100, 200, window=label6)
+
+entry6 = tk.Entry (root) # create 3rd entry box
+canvas1.create_window(270, 200, window=entry6)
+
+
+def values(): 
+    global New_Interest_Rate #our 1st input variable
+    New_Dwell_Type = float(entry1.get()) 
+    
+    global New_Unemployment_Rate #our 2nd input variable
+    New_YrSold = float(entry2.get()) 
+    
+    global New_nemployment_Rate #our 2nd input variable
+    New_MoSold = float(entry3.get())
+    
+    global New_nemployment_Rate #our 2nd input variable
+    New_Lot_area = float(entry4.get())
+    
+    global loyment_Rate #our 2nd input variable
+    New_OvrAllQual = float(entry5.get())
+    
+    global ew_nemployment_Rate #our 2nd input variable
+    New_Liv_area = float(entry6.get())
+    
+    Prediction_result  = ('Predicted Property Price: ', regr.predict([[New_Dwell_Type,New_YrSold,New_MoSold,New_Lot_area,New_OvrAllQual,New_Liv_area]]))
+    label_Prediction = tk.Label(root, text= Prediction_result, bg='orange')
+    canvas1.create_window(260, 280, window=label_Prediction)
+    
+button1 = tk.Button (root, text='Predict Property Price',command=values, bg='orange') # button to call the 'values' command above 
+canvas1.create_window(270, 220, window=button1)
+
+#plot 1st scatter 
+figure3 = plt.Figure(figsize=(5,4), dpi=100)
+ax3 = figure3.add_subplot(111)
+ax3.scatter(df['Dwell_Type'].astype(float),df['Property_Sale_Price'].astype(float), color = 'r')
+scatter3 = FigureCanvasTkAgg(figure3, root) 
+scatter3.get_tk_widget().pack(side=tk.RIGHT, fill=tk.BOTH)
+ax3.legend() 
+ax3.set_xlabel('Dwell_Type')
+ax3.set_title('Dwell_Type Vs. Property_Sale_Price')
+
+#plot 2nd scatter 
+figure4 = plt.Figure(figsize=(5,4), dpi=100)
+ax4 = figure4.add_subplot(111)
+ax4.scatter(df['YrSold'].astype(float),df['Property_Sale_Price'].astype(float), color = 'g')
+scatter4 = FigureCanvasTkAgg(figure4, root) 
+scatter4.get_tk_widget().pack(side=tk.RIGHT, fill=tk.BOTH)
+ax4.legend() 
+ax4.set_xlabel('Year Sold')
+ax4.set_title('Year sold Vs. Property_Sale_Price')
+
+ 
+root.mainloop()
